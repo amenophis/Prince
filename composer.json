@@ -1,0 +1,29 @@
+{
+    "name": "amenophis/prince-wrapper",
+    "type": "library",
+    "description": "Prince wrapper",
+    "keywords": ["prince", "pdf", "htmltopdf"],
+    "homepage": "",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jérémy Leherpeur",
+            "homepage": "http://github.com/amenophis"
+        }
+    ],
+    "require": {
+        "php":                            ">=5.3.3"
+    },
+    "config": {
+        "bin-dir": "bin"
+    },
+    "autoload": {
+        "psr-0": { "Amenophis\\Library\\PrinceWrapper": "" }
+    },
+    "target-dir": "Amenophis/Library/PrinceWrapper",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
