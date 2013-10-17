@@ -725,7 +725,7 @@ class Configuration
      */
     public function setLog($log)
     {
-        
+
 
         $this->log = $log;
 
@@ -1284,7 +1284,14 @@ class Configuration
     {
         if ($config && is_array($config)) {
             foreach ($config as $key => $value) {
-                $camelAttribute = preg_replace('/(?:^|_)(.?)/e',"strtoupper('$1')", $key);
+                $camelAttribute = preg_replace_callback(
+                    '/(?:^|_)(.?)/',
+                    function ($m) {
+                        return strtoupper($m[1]);
+                    },
+                    $key
+                );
+
                 $method = sprintf("set%s", $camelAttribute);
                 if (method_exists($this, $method)) {
                    call_user_func(array($this, $method), $value);
