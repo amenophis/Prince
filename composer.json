@@ -18,9 +18,9 @@
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": { "Amenophis\\Library\\PrinceWrapper": "" }
+        "psr-0": { "Amenophis\\PrinceWrapper": "" }
     },
-    "target-dir": "Amenophis/Library/PrinceWrapper",
+    "target-dir": "Amenophis/PrinceWrapper",
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
