@@ -1,7 +1,7 @@
 {
-    "name": "amenophis/prince-wrapper",
+    "name": "amenophis/prince",
     "type": "library",
-    "description": "Prince wrapper",
+    "description": "Prince",
     "keywords": ["prince", "pdf", "htmltopdf"],
     "homepage": "",
     "license": "MIT",
@@ -12,15 +12,15 @@
         }
     ],
     "require": {
-        "php":                            ">=5.3.3"
+        "php": ">=5.3.3"
     },
     "config": {
         "bin-dir": "bin"
     },
     "autoload": {
-        "psr-0": { "Amenophis\\PrinceWrapper": "" }
+        "psr-0": { "Amenophis\\Prince": "" }
     },
-    "target-dir": "Amenophis/PrinceWrapper",
+    "target-dir": "Amenophis/Prince",
     "extra": {
         "branch-alias": {
             "dev-master": "1.0-dev"
