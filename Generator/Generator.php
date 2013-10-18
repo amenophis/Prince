@@ -12,6 +12,7 @@
 namespace Amenophis\Prince\Generator;
 
 use Amenophis\Prince\Command\Command;
+use Symfony\Component\Process\Process;
 
 /**
  * @author Bertrand Zuchuat <bertrand.zuchuat@gmail.com>
@@ -39,7 +40,7 @@ class Generator implements GeneratorInterface
     {
         $this->prepareOutput($output, $overwrite);
 
-        $command = $this->getCommand($input, $output, $options);
+        $command = $this->command->getCommand($input, $output, $options);
 
         list($status, $stdout, $stderr) = $this->executeCommand($command);
         $this->checkProcessStatus($status, $stdout, $stderr, $command);
@@ -64,7 +65,7 @@ class Generator implements GeneratorInterface
      */
     public function getOutput($input, array $options = array())
     {
-        $filename = $this->createTemporaryFile(null, $this->getDefaultExtension());
+        $filename = $this->createTemporaryFile(null, 'pdf');
 
         $this->generate($input, $filename, $options);
 
@@ -90,50 +91,10 @@ class Generator implements GeneratorInterface
     }
 
     /**
-     * Returns the command for the given input and output files
-     *
-     * @param string $input   The input file
-     * @param string $output  The ouput file
-     * @param array  $options An optional array of options that will be used
-     *                         only for this command
-     *
-     * @return string
-     */
-    public function getCommand($input, $output, array $options = array())
-    {
-        $options = $this->mergeOptions($options);
-
-        return $this->command->getCommand($input, $output, $options);
-    }
-
-    /**
-     * Merges the given array of options to the instance options and returns
-     * the result options array. It does NOT change the instance options.
-     *
-     * @param array $options
-     * @return mixed
-     * @throws \InvalidArgumentException
-     */
-    protected function mergeOptions(array $options)
-    {
-        $mergedOptions = $this->options;
-
-        foreach ($options as $name => $value) {
-            if (!array_key_exists($name, $mergedOptions)) {
-                throw new \InvalidArgumentException(sprintf('The option \'%s\' does not exist.', $name));
-            }
-
-            $mergedOptions[$name] = $value;
-        }
-
-        return $mergedOptions;
-    }
-
-    /**
      * Checks the specified output
      *
-     * @param $output The output filename
-     * @param $command The generation command
+     * @param string $output The output filename
+     * @param string $command The generation command
      * @throws \RuntimeException if the output file generation failed
      */
     protected function checkOutput($output, $command)
@@ -158,10 +119,10 @@ class Generator implements GeneratorInterface
     /**
      * Checks the process return status
      *
-     * @param $status The exit status code
-     * @param $stdout The stdout content
-     * @param $stderr The stderr content
-     * @param $command The run command
+     * @param string $status The exit status code
+     * @param string $stdout The stdout content
+     * @param string $stderr The stderr content
+     * @param string $command The run command
      * @throws \RuntimeException if the output file generation failed
      */
     protected function checkProcessStatus($status, $stdout, $stderr, $command)
@@ -188,7 +149,7 @@ class Generator implements GeneratorInterface
      */
     protected function createTemporaryFile($content = null, $extension = null)
     {
-        $filename = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . uniqid('knp_snappy', true);
+        $filename = rtrim(sys_get_temp_dir(), DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR . uniqid('amenophis_prince', true);
 
         if (null !== $extension) {
             $filename .= '.'.$extension;
@@ -211,15 +172,8 @@ class Generator implements GeneratorInterface
      */
     protected function executeCommand($command)
     {
-        if (class_exists('Symfony\Component\Process\Process')) {
-            $process = new \Symfony\Component\Process\Process($command, $this->env);
-            if ($this->timeout !== false) {
-                $process->setTimeout($this->timeout);
-            }
-        } else {
-            $process = new Process($command, $this->env);
-        }
 
+        $process = new Process($command);
         $process->run();
 
         return array(

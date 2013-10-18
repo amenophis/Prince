@@ -18,5 +18,5 @@ namespace Amenophis\Prince\Command;
  */
 interface CommandInterface
 {
-    function getCommand();
+    function getCommand($input, $output, $options = array());
 }

@@ -44,18 +44,29 @@ class Command implements CommandInterface
         }
     }
 
-    public function getCommand()
+    public function getCommand($input, $output, $options = array())
     {
-        return $this->generateCommandLine();
+        return $this->generateCommandLine($input, $output, $options);
     }
 
-    protected function generateCommandLine()
+    protected function generateCommandLine($input, $output, $options = array())
     {
         $command = $this->binaryPath;
 
         foreach ($this->config->all() as $key => $value) {
+            if (array_key_exists($key, $options) && $options[$key]) {
+                $value = $options[$key];
+            }
 
+            if (is_bool($value) && $value !== false) {
+                $command .= sprintf(" --%s", $key);
+            } elseif ($value !== null && is_string($value)) {
+                $command .= sprintf(" --%s=\"%s\"", $key, $value);
+            }
         }
+
+        $command .= sprintf(" --output=\"%s\"", $output);
+        $command .= sprintf(" %s", $input);
 
         return $command;
     }
