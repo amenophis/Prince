@@ -46,13 +46,13 @@ class Configuration
      * -i, --input=FORMAT
      * Set input format [auto | xml | html | html5].
      */
-    //protected $input;
+    protected $input;
 
     /**
      * -l, --input-list=FILE
      * Read input file list from specified file.
      */
-    //protected $inputList;
+    protected $inputList;
 
     /**
      * --baseurl=URL
